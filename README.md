@@ -277,7 +277,7 @@ Browse to localhost:8080 (depending on deployment options).
 
 Below, you can see the web-application in action, querying Watson in natural language:
 
-![asdf](https://media.github.ibm.com/user/79254/files/de549a80-9481-11ea-9add-fbf2325f7f2a)
+![asdf](https://user-images.githubusercontent.com/10428517/82243388-5d1f5c80-98f4-11ea-8b36-f97b7a841aca.gif)
 
 Ask the following questions:
 
