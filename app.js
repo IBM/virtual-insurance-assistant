@@ -89,9 +89,8 @@ app.use(express.static('./public')); // load UI from public folder
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-
 // adding recommender routes
-var indexRouter = require('./routes/index');
+const indexRouter = require('./routes/index');
 app.use('/recommender', indexRouter);
 
 // Chatbot endpoint to be called from the client side
@@ -133,7 +132,7 @@ app.post('/api/message', async (req, res) => {
     assistant.message(params, function (err, data) {
       if (err) {
         console.log('assistant.message error: ', err);
-        return res.json({ output: { generic: [{ response_type: 'text', text: err.message}]}});
+        return res.json({ output: { generic: [{ response_type: 'text', text: err.message }] } });
       } else {
         console.log('assistant.message result: ', JSON.stringify(data.result, null, 2));
         checkForLookupRequests(params, data, function (err, data) {
@@ -162,8 +161,8 @@ function checkForLookupRequests(input, output, callback) {
   // TODO: How can we handle a webhook config error here or in the dialog?
   if (data.output.user_defined && data.output.user_defined.webhook_error) {
     const webhook_error = data.output.user_defined.webhook_error;
-    console.log("webhook error: ", webhook_error);
-    Object.keys(webhook_error).forEach( k => console.log(`key=${k} message=${webhook_error[k].message}`));
+    console.log('webhook error: ', webhook_error);
+    Object.keys(webhook_error).forEach((k) => console.log(`key=${k} message=${webhook_error[k].message}`));
   }
 
   if (data.output.generic.length && data.output.generic[0].response_type === 'search') {

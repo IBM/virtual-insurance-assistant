@@ -21,6 +21,6 @@ module.exports = {
     "prefer-const": "error",
     "prefer-rest-params": "off",
     "valid-jsdoc": "off",
-    "camelcase": 2,
+    "camelcase": ["error", {"allow": ["response_type", "return_context", "user_defined", "webhook_error"]}],
   }
 };
