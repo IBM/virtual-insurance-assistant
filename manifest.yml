@@ -1,0 +1,10 @@
+---
+declared-services:
+applications:
+- path: .
+  memory: 256M
+  instances: 1
+  name: virtual-insurance-agent
+  disk_quota: 256M
+  random-route: false
+  timeout: 180

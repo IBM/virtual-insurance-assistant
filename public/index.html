@@ -1,0 +1,231 @@
+<!--
+ * Copyright 2017 IBM Corp. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the 'License'); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an 'AS IS' BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:display="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/app.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>VIA the Virtual Insurance Agency</title>
+</head>
+
+<body>
+
+<header class="header">
+        <img class="header--logo" src="img/via.png" alt="">
+        <h1 class="resort-name--heading" style="font-weight:normal;font-size:28px;font-family:Rockwell-Regular, Rockwell;letter-spacing:1.01377106;fill:none;fill-rule:evenodd;stroke:none;stroke-width:1">VIRTUAL INSURANCE AGENCY</h1>
+
+    <ul class="main-nav--list">
+        <li class="main-nav--list__item">AUTO</li>
+        <li class="main-nav--list__item">HOME</li>
+        <li class="main-nav--list__item">LIFE</li>
+    </ul>
+</header>
+
+<main class="hero js-hero">
+    <nav class="sub-nav">
+        <div class="select-city">
+            <select id="register" onchange="doSelectTask()" class="select-task js-select1">
+                <option value="">HOW CAN WE HELP YOU TODAY?</option>
+                <option value="chat">Chat with our Virtual Assistant</option>
+                <option value="claim">Submit a new claim</option>
+                <option value="policy">Apply for a new policy</option>
+            </select>
+            <svg class="select--arrow" width="10" height="5" viewBox="0 0 10 5" fill-rule="evenodd">
+                <path d="M10 0L5 5 0 0z"></path>
+            </svg>
+        </div>
+    </nav>
+
+  </main>
+
+  <main role="main">
+
+    <!-- Uncomment and replace this script block with your own Assistant Web Chat
+    <script>
+      window.watsonAssistantChatOptions = {
+          integrationID: "2a08f339-a628-465f-8f8f-d2ef4b40a761", // The ID of this integration.
+          region: "eu-gb", // The region your integration is hosted in.
+          serviceInstanceID: "2db43234-a4af-41d1-9ecf-ad81001aaa43", // The ID of your service instance.
+          onLoad: function(instance) { instance.render(); }
+        };
+      setTimeout(function(){
+        const t=document.createElement('script');
+        t.src="https://web-chat.global.assistant.watson.appdomain.cloud/loadWatsonAssistantChat.js";
+        document.head.appendChild(t);
+      });
+    </script>
+    -->
+
+    <div class="details-container js-container">
+
+
+        <div id="chat-id" class="js-chat" style="display:none;">
+
+                <div id="chat-column-holder" class="responsive-column content-column">
+                    <div class="chat-column">
+                        <div id="scrollingChat">
+                            <h4>Virtual Assistant</h4>
+                        </div>
+                        <label for="textInput" class="inputOutline">
+                            <input id="textInput" class="input responsive-column" placeholder="Type something" type="text"
+                                   onkeydown="/*globals CanvasJS */
+				ConversationPanel.inputKeyDown(event, this)">
+                        </label>
+                    </div>
+            </div>
+            <p></p>
+        </div>
+        <div id="claim-id" class="js-claim" style="display:none;">
+            <form id="form1">
+                <p class="font-weight-bold">SUBMIT A NEW CLAIM</p>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="firstName">First Name</label>
+                        <input type="text" class="form-control form-control-sm" id="firstName" placeholder="First Name" required="true">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" class="form-control form-control-sm" id="lastName" placeholder="Last Name" required="true">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Email</label>
+                        <input type="email" class="form-control form-control-sm" id="inputEmail4" placeholder="name@example.com" required="true">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="inputPhone">Phone</label>
+                        <input type="phone" class="form-control form-control-sm" id="inputPhone" placeholder="(xxx) xxx-xxxx" required="true">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="streetAddress">Home Address</label>
+                    <input type="text" class="form-control form-control-sm" id="streetAddress" placeholder="1234 Main St">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <input type="text" class="form-control form-control-sm" id="inputCity" placeholder="City">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control form-control-sm" id="inputState" placeholder="TX">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control form-control-sm" id="zipCode" placeholder="99999">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputAddress2">Describe the incident</label>
+                    <input type="text" class="form-control form-control-sm" id="inputAddress2" placeholder="Please describe the incident details here...">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <p></p>
+        </div>
+        <div id="policy-id" class="js-policy" style="display:none;">
+            <form id="form2">
+                <p class="font-weight-bold">NEW POLICY APPLICATION</p>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="firstName">First Name</label>
+                        <input type="text" class="form-control form-control-sm" id="firstNamePol" placeholder="First Name" required="true">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" class="form-control form-control-sm" id="lastNamePol" placeholder="Last Name" required="true">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Email</label>
+                        <input type="email" class="form-control form-control-sm" id="inputEmail4Pol" placeholder="name@example.com" required="true">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="inputPhone">Phone</label>
+                        <input type="phone" class="form-control form-control-sm" id="inputPhonePol" placeholder="(xxx) xxx-xxxx" required="true">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="streetAddress">Home Address</label>
+                    <input type="text" class="form-control form-control-sm" id="streetAddressPol" placeholder="1234 Main St">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <input type="text" class="form-control form-control-sm" id="inputCityPol" placeholder="City">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control form-control-sm" id="inputStatePol" placeholder="TX">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <input type="text" class="form-control form-control-sm" id="zipCodePol" placeholder="99999">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputAddress2">Describe the coverage you are looking for</label>
+                    <input type="text" class="form-control form-control-sm" id="inputAddress2Pol" placeholder="Explain your insurance needs here...">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <img class="footer--logo" src="img/via.png" alt="">
+    <p class="footer-content footer-content__heading"><span class="bold">VIA the Virtual Insurance Agency</span></p>
+    <h6 class="footer-content footer-content__heading">GLOBAL SITES</h6>
+    <p class="footer-content footer-content__list">
+        Español | Français | Deutsch | Italiano | Português | 日本語 | 한국어 | العربية | 简体中文 | 繁體中文
+    </p>
+    <p class="footer-content footer-content__heading"><span class="bold">LEGAL LINKS</span></p>
+    <p class="footer-content footer-content__legal">Global Privacy Statement | Cookies Statement | Site Usage Agreement</p>
+</footer>
+
+	<!-- Bootstrap core JavaScript
+		================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+
+	<script src="js/modal.js"></script>
+	<script src="js/api.js"></script>
+	<script src="js/common.js"></script>
+	<script src="js/conversation.js"></script>
+  <script src="js/global.js"></script>
+
+
+<script src="main.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
