@@ -151,7 +151,7 @@ Next, we will add more features to our virtual assistant by using Watson Discove
 
 ## 5. Train Watson Discovery to answer insurance policy questions
 
-### If you want to use the free version of Discovery, skip to [this section](https://github.ibm.com/ibm-developer-eti-ai-analytics/virtual-insurance-agent/tree/master/asst_demo#the-chatbot-answers-policy-questions-by-querying-discovery-free-instance-option)
+### If you want to use the free version of Discovery, skip to [this section](https://github.com/IBM/virtual-insurance-assistant#the-chatbot-answers-policy-questions-by-querying-discovery-free-instance-option)
 
 ### The chatbot answers policy questions by querying Discovery (Paid instance required)
 
