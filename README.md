@@ -276,9 +276,10 @@ Next, we'll configure the Mechanic Recommender service. This will enable a custo
 
 This section will require completion of the "Watson Knowledge Studio" tutorial beforehand. Once the tutorial has been completed, a custom model will be deployed to your Natural Language Understanding service instance.
 
-Collect the required credentials by navigating to your Natural Language Understanding instance in the IBM Cloud console. In the "credentials" section, copy your API key and URL, and place into your `.env` file
-
+Collect the required credentials by navigating to your Natural Language Understanding instance in the IBM Cloud console.
 ![](doc/source/images/nlu_creds.png)
+
+In the displayed "credentials" section, copy your API key and URL, and place into your `.env` file
 
 ```
 NATURAL_LANGUAGE_UNDERSTANDING_APIKEY="<apikey>"
