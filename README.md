@@ -29,7 +29,8 @@ based on which mechanics are highly reviewed, and covered by the policy.
 1. [Deploy the application](#3-deploy-the-application)
 1. [Configure Dialog Webhook](#4-Configure-Dialog-Webhook)
 1. [Train Watson Discovery to answer insurance policy questions](#5-Train-Watson-Discovery-to-answer-insurance-policy-questions)
-1. [Use the app](#6-use-the-app)
+1. [Configure mechanic recommender service](#6-configure-mechanic-recommender-service)
+1. [Use the app](#7-use-the-app)
 
 ## 1. Clone the repo
 
@@ -269,7 +270,33 @@ From your Assistant panel:
 
 Now when the dialog skill node invokes the search skill, the search skill will query the Discovery collection and display the text from the policy document to the user.
 
-## 6. Use the app
+## 6. Configure mechanic recommender service
+
+Next, we'll configure the Mechanic Recommender service. This will enable a customer to receive recommendations for mechanics near them, based on the type of vehicle repair that is needed.
+
+This section will require completion of the "Watson Knowledge Studio" tutorial beforehand. Once the tutorial has been completed, a custom model will be deployed to your Natural Language Understanding service instance.
+
+Collect the required credentials by navigating to your Natural Language Understanding instance in the IBM Cloud console.
+![](doc/source/images/nlu_creds.png)
+
+In the displayed "credentials" section, copy your API key and URL, and place into your `.env` file
+
+```
+NATURAL_LANGUAGE_UNDERSTANDING_APIKEY="<apikey>"
+NATURAL_LANGUAGE_UNDERSTANDING_URL="<url>"
+```
+
+Then, navigate to your Watson Knowledge Studio instance, select your workspace, click "Machine Learning Model", and then select "Versions"
+
+![](doc/source/images/nlu_model.png)
+
+Copy the Model ID of your latest deployment version, and paste into your .env file.
+
+```
+NATURAL_LANGUAGE_UNDERSTANDING_MODEL_ID=<model_id>
+```
+
+## 7. Use the app
 
 ### Use a browser to access the UI and chatbot
 

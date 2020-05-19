@@ -20,6 +20,9 @@ require('dotenv').config({
   silent: true,
 });
 
+const users = require('./recommender/mockUsers.json');
+const recMethods = require('./recommender/recMethods.js');
+
 const express = require('express'); // app server
 const bodyParser = require('body-parser'); // parser for post requests
 
@@ -88,10 +91,6 @@ const app = express();
 app.use(express.static('./public')); // load UI from public folder
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-
-// adding recommender routes
-const indexRouter = require('./routes/index');
-app.use('/recommender', indexRouter);
 
 // Chatbot endpoint to be called from the client side
 app.post('/api/message', async (req, res) => {
@@ -274,7 +273,75 @@ function checkForLookupRequests(input, output, callback) {
     } else {
       callback(null, data);
     }
+  } else if ((data.output.intents.length > 0) && (data.output.intents[0]["intent"] == 'describe_damage')) {
+    const description = input.input.text;
+    recMethods
+      .classifyDamage(description)
+      .then((type) => type[0])
+      .then((result) => {
+        if (data.output.generic && result) {
+          console.log('response received');
+          console.log(JSON.stringify(data.output));
+          const recommendations = recMethods.getRankings(result);
+          const shopNames = recommendations.map((r, idx) => `${r[0].name}`);
+          const shopNamesString = '\n\n' + recommendations.map((r, idx) => `${idx}. ${r[0].name}`).join('\n');
+          const recResponse = {
+            damage_description: result,
+            recs: shopNames,
+            recsString: shopNamesString,
+          };
+          const responsePrefix = `It sounds like you need a mechanic that specializes in "${result}" repairs. Here are a few suggestions for mechanics near you. Would you like to select one? `;
+          // set context
+          data.context.skills['main skill']['user_defined'].recResponse = recResponse;
+          const r = { response_type: 'text', text: responsePrefix + shopNamesString };
+          data.output.generic.push(r);
+          callback(null, data);
+        } else {
+          callback(null, data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        callback(null, data);
+      });
+  } else if ((data.output.intents.length > 0) && (data.output.intents[0]["intent"] == 'insurance_view_claim_status')) {
+    // lookup claim status
+    const userId = data.context.skills['main skill']['user_defined']['customerId'];
+    const userList = users.filter((user) => user.id.toLowerCase() == userId.toLowerCase());
+    if (userList.length > 0 && userList[0].claims.length > 0) {
+      const user = userList[0];
+      // returning latest claim in array
+      const latestClaim = user.claims.slice(-1)[0];
+      console.log(`retrieved claim ${JSON.stringify(latestClaim)}`);
+      data.context.skills['main skill']['user_defined'].claim = latestClaim;
+      const response = `You have a ${latestClaim.status} claim. Your vehicle is being serviced at "${latestClaim.assignedMech}"`;
+      const r = { response_type: 'text', text: response };
+      data.output.generic.push(r);
+      console.log(`updated context ${JSON.stringify(data)}`);
+      callback(null, data);
+    } else {
+      callback(null, data);
+    }
+  } else if (data.output.generic && data.output.generic.filter((r) => r.text.includes('Assigning') && r.text.includes('to your claim')).length > 0) {
+    console.log('adding mechanic to claim');
+    // lookup mechanic from selection
+    const selection = data.output.entities.filter((e) => e.entity == 'sys-number');
+    const mechanicIdx = selection[0].value;
+    const mechanic = data.context.skills['main skill']['user_defined']['recResponse']['recs'][mechanicIdx];
+    // lookup user from context
+    const userId = data.context.skills['main skill']['user_defined']['customerId'];
+    const userIdx = users.findIndex((user) => user.id == userId);
+    if (userIdx != -1) {
+      // assign mechanic to user
+      const user = users[userIdx];
+      const latestClaim = user.claims.slice(-1)[0];
+      users[userIdx].claims.slice(-1)[0].assignedMech = mechanic;
+      callback(null, data);
+    } else {
+      callback(null, data);
+    }
   } else {
+    // anything_else
     callback(null, data);
   }
 }
