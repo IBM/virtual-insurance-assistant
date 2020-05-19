@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/IBM/virtual-insurance-assistant.svg?branch=master)](https://travis-ci.com/IBM/virtual-insurance-assistant)
+
 # Build a virtual insurance assistant to help process claims
 
 In this code pattern, we will create a chatbot to help insurance agents process claims. We will use Watson's natural
@@ -21,6 +23,12 @@ based on which mechanics are highly reviewed, and covered by the policy.
 3. User chats via web-application UI to talk to Watson Assistant.
 4. Watson Assistant answers policy questions using Watson Discovery's querying capabilities.
 5. Watson Assistant recommends a mechanic based on the type of damage that is done to the vehicle, and on the sentiment of the customer reviews, using the Webhook feature.
+
+## Prerequisites
+
+- [ ] Tutorial: Analyze and answer policy questions with Smart Document Understanding
+- [ ] Tutorial: Building a recommendation  engine for an insurance  platform using Watson Knowledge  Studio and Natural Language Understanding
+- [ ] If you do not have an IBM Cloud account, create an account [here](https://cloud.ibm.com/registration) for free.
 
 ## Steps
 
