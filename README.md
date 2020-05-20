@@ -11,8 +11,7 @@ When you have completed this code pattern, you will understand how to:
 
 * Process complex insurance documents with Watson Discovery to efficiently answer customer policy questions.
 * Use Watson Knowledge Studio to create custom models and entities to understand and classify mechanic reviews more accurately.
-* Create a web-based application which features a virtual assistant that can answer policy questions and make recommendations
-based on which mechanics are highly reviewed, and covered by the policy.
+* Create a web-based application which features a virtual assistant that can answer policy questions and make recommendations based on which mechanics are highly reviewed, and covered by the policy.
 
 ![architecture](doc/source/images/architecture.png)
 
@@ -22,20 +21,21 @@ based on which mechanics are highly reviewed, and covered by the policy.
 2. Mechanic review documents are uploaded to Watson Knowledge Studio, and then annotated to create custom entities and relationships.
 3. User chats via web-application UI to talk to Watson Assistant.
 4. Watson Assistant answers policy questions using Watson Discovery's querying capabilities.
-5. Watson Assistant recommends a mechanic based on the type of damage that is done to the vehicle, and on the sentiment of the customer reviews, using the Webhook feature.
+5. Watson Assistant recommends a mechanic based on the type of damage that is done to the vehicle, and on the sentiment of the customer reviews.
 
 ## Prerequisites
 
+> TODO: Make these links when the tutorials are published
+
 - [ ] Tutorial: Analyze and answer policy questions with Smart Document Understanding
 - [ ] Tutorial: Building a recommendation  engine for an insurance  platform using Watson Knowledge  Studio and Natural Language Understanding
-- [ ] If you do not have an IBM Cloud account, create an account [here](https://cloud.ibm.com/registration) for free.
 
 ## Steps
 
 1. [Clone the repo](#1-clone-the-repo)
 1. [Create the Watson Assistant skill](#2-Create-the-Watson-Assistant-skill)
 1. [Deploy the application](#3-deploy-the-application)
-1. [Configure Dialog Webhook](#4-Configure-Dialog-Webhook)
+1. [Test in Assistant Tooling](#4-Test-in-Assistant-Tooling)
 1. [Train Watson Discovery to answer insurance policy questions](#5-Train-Watson-Discovery-to-answer-insurance-policy-questions)
 1. [Configure mechanic recommender service](#6-configure-mechanic-recommender-service)
 1. [Use the app](#7-use-the-app)
@@ -98,17 +98,7 @@ Click on one of the options below for instructions on deploying the Node.js serv
 | :-: | :-: | :-: |
 | [![local](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/local.png)](doc/source/local.md) | [![openshift](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/openshift.png)](doc/source/openshift.md) | [![public](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/cf.png)](doc/source/cf.md) |
 
-## 4. Configure Dialog Webhook
-
-Click on your dialog skill to edit it.
-
-In the left menu, click "Options" then "Webhooks".
-
-In the URL field, enter your server's public endpoint in the format `http://<IP_ADDR>:<PORT>/recommender/assistant`
-
-![configure_webhook.png](doc/source/images/configure_webhook.png)
-
-### Test in Assistant Tooling
+## 4. Test in Assistant Tooling
 
 ![preview-link](doc/source/images/preview-link.png)
 
@@ -333,10 +323,6 @@ Ask the following questions:
 * Sorry, currently I do not have a response. Discovery is not configured.
 
   > This indicates that the server is trying to call Discovery directly instead of using a search skill, but the runtime environment is not configured to use discovery.
-
-* Connection to Webhook failed.
-
-  > This shows up in the logs when your webhook is not properly configured (the IP_ADDR:HOST needs to be configured) or you configured an IP_ADDR:HOST that is not reachable.
 
 ## License
 
