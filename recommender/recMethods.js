@@ -2,10 +2,10 @@ require('dotenv').config({
   silent: true,
 });
 
-const { getAuthenticatorFromEnvironment } = require('ibm-watson/auth');
+let naturalLanguageUnderstanding = false;
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
 if (process.env.NATURAL_LANGUAGE_UNDERSTANDING_APIKEY) {
-  const naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
+  naturalLanguageUnderstanding = new NaturalLanguageUnderstandingV1({
     version: '2020-05-14',
   });
 } else {
@@ -17,6 +17,9 @@ const shops = require('./businesses.json');
 
 
 const classifyDamage = function (input) {
+  if (!naturalLanguageUnderstanding) {
+    return Promise.resolve(); // "N/A"
+  }
   const analyzeParams = {
     text: input,
     features: {
@@ -34,10 +37,10 @@ const classifyDamage = function (input) {
       if (analysisResults.result.entities && analysisResults.result.entities.length > 0) {
         const type = analysisResults.result.entities.map((e) => e.disambiguation.subtype[0]);
         console.log(`${type} repair requested`);
-        return type;
+        return type[0];
       } else {
         console.log('no repair type detected');
-        return null; // "N/A"
+        return Promise.resolve(); // "N/A"
       }
     })
     .catch((err) => {

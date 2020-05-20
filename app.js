@@ -95,7 +95,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 // Chatbot endpoint to be called from the client side
 app.post('/api/message', async (req, res) => {
   if (!assistant) {
-    let text = 'No Watson Assistant. Please configure the runtime environment and restart the server.';
+    const text = 'No Watson Assistant. Please configure the runtime environment and restart the server.';
     return res.json({ output: { generic: [{ response_type: 'text', text }] } });
   }
 
@@ -274,7 +274,6 @@ function checkForLookupRequests(input, output, callback) {
     const description = input.input.text;
     recMethods
       .classifyDamage(description)
-      .then((type) => type[0])
       .then((result) => {
         if (data.output.generic && result) {
           console.log('response received');
@@ -294,6 +293,8 @@ function checkForLookupRequests(input, output, callback) {
           data.output.generic.push(r);
           callback(null, data);
         } else {
+          const r = { response_type: 'text', text: 'Unable to determine repair type. Is NLU configured?' };
+          data.output.generic.push(r);
           callback(null, data);
         }
       })
