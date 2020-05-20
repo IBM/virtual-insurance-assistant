@@ -37,7 +37,7 @@ const DISCO_API_VERSION = '2020-05-04';
 // Optional Watson Assistant client, if configured
 const assistantId = process.env.ASSISTANT_ID;
 let assistant = false;
-if (process.env.ASSISTANT_ID) {
+if (assistantId) {
   // need to manually set url and disableSslVerification to get around
   // current Cloud Pak for Data SDK issue IF user uses
   // `CONVERSATION_` prefix in run-time environment.
@@ -94,12 +94,9 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 // Chatbot endpoint to be called from the client side
 app.post('/api/message', async (req, res) => {
-  if (!assistantId) {
-    return res.json({
-      output: {
-        text: 'No Watson Assistant. Please configure the runtime environment and restart the server.',
-      },
-    });
+  if (!assistant) {
+    let text = 'No Watson Assistant. Please configure the runtime environment and restart the server.';
+    return res.json({ output: { generic: [{ response_type: 'text', text }] } });
   }
 
   const sessionId = (req.body.context && req.body.context.global.session_id) || (await assistant.createSession({ assistantId: assistantId })).result.session_id;
@@ -273,7 +270,7 @@ function checkForLookupRequests(input, output, callback) {
     } else {
       callback(null, data);
     }
-  } else if ((data.output.intents.length > 0) && (data.output.intents[0]["intent"] == 'describe_damage')) {
+  } else if (data.output.intents.length > 0 && data.output.intents[0]['intent'] == 'describe_damage') {
     const description = input.input.text;
     recMethods
       .classifyDamage(description)
@@ -304,7 +301,7 @@ function checkForLookupRequests(input, output, callback) {
         console.log(err);
         callback(null, data);
       });
-  } else if ((data.output.intents.length > 0) && (data.output.intents[0]["intent"] == 'insurance_view_claim_status')) {
+  } else if (data.output.intents.length > 0 && data.output.intents[0]['intent'] == 'Insurance_View_Claim_Status') {
     // lookup claim status
     const userId = data.context.skills['main skill']['user_defined']['customerId'];
     const userList = users.filter((user) => user.id.toLowerCase() == userId.toLowerCase());
@@ -333,8 +330,6 @@ function checkForLookupRequests(input, output, callback) {
     const userIdx = users.findIndex((user) => user.id == userId);
     if (userIdx != -1) {
       // assign mechanic to user
-      const user = users[userIdx];
-      const latestClaim = user.claims.slice(-1)[0];
       users[userIdx].claims.slice(-1)[0].assignedMech = mechanic;
       callback(null, data);
     } else {

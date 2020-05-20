@@ -2,7 +2,7 @@
 
 This document shows how to run the application using Cloud Foundry on IBM Cloud.
 
-[![Deploy to IBM Cloud](https://cloud.ibm.com/devops/setup/deploy/button_x2.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/watson-banking-chatbot.git)
+[![Deploy to IBM Cloud](https://cloud.ibm.com/devops/setup/deploy/button_x2.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/virtual-insurance-assistant.git)
 
 ## Steps
 
