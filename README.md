@@ -316,13 +316,25 @@ Ask the following questions:
 
 ## Troubleshooting
 
+* No Watson Assistant. Please configure the runtime environment and restart the server.
+
+  > The chatbot will say this if you run it without configuring an Assistant APIKEY, URL and ID. Follow the deployment instructions to provide the .env settings or runtime environment.
+
+* Sorry, currently I do not have a response. Discovery is not configured.
+
+  > The chatbot will say this if you try a policy inquiry, but the search skill was not created. It is trying to call the Discovery service via the SDK, but finds the DISCOVERY_ environment variables were not set. Follow the deployment instructions to provide the .env settings or runtime environment (or add a search skill).
+
 * BadRequest - "dialog skill" is trying to invoke missing "search skill" for the given agent
 
   > This error indicates that your assistant does not have search skill.
 
-* Sorry, currently I do not have a response. Discovery is not configured.
+* NLU service not configured. Unable to determine repair type. Is NLU configured?
 
-  > This indicates that the server is trying to call Discovery directly instead of using a search skill, but the runtime environment is not configured to use discovery.
+  > This error indicates that your assistant is trying to use NLU to determine the type of repair needed, but either NLU is not configured or it could not recognize a known repair type. Follow the deployment instructions to provide the .env settings or runtime environment for NLU. If you did not configure NLU the server output will say "NLU service not configured".
+
+* Unable to determine repair type. Is NLU configured?
+
+  > See above. This is the same error message, but NLU is configured. This happens if either the NATURAL_LANGUAGE_UNDERSTANDING_MODEL_ID is not configured or not trained properly. It can also happen if you describe an accident that does not include a repair type that it is trained to recognize.
 
 ## License
 
