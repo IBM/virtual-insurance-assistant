@@ -9,12 +9,11 @@ if (process.env.NATURAL_LANGUAGE_UNDERSTANDING_APIKEY) {
     version: '2020-05-14',
   });
 } else {
-  console.log("NLU service not configured")
+  console.log('NLU service not configured');
 }
 
 const reviews = require('./reviewsList.json');
 const shops = require('./businesses.json');
-
 
 const classifyDamage = function (input) {
   if (!naturalLanguageUnderstanding) {
@@ -47,7 +46,6 @@ const classifyDamage = function (input) {
       console.log('error:', err);
     });
 };
-
 
 // get repair breakdown by business and type
 const getRepairCount = function (reviews) {
@@ -96,7 +94,7 @@ const sortByType = function (countPerBusiness, filteredBusinessIds, type) {
 };
 
 const getRankings = function (type) {
-  console.log("ranking businesses by type")
+  console.log('ranking businesses by type');
   // const type = 'Engine'
   const filteredBusinessIds = filterByType(countPerBusiness, type);
   const topBusinessIds = sortByType(countPerBusiness, filteredBusinessIds, type);
@@ -111,8 +109,8 @@ const getRankings = function (type) {
 };
 
 module.exports = {
-    classifyDamage: classifyDamage,
-    sortByType: sortByType,
-    filterByType: filterByType,
-    getRankings: getRankings
+  classifyDamage: classifyDamage,
+  sortByType: sortByType,
+  filterByType: filterByType,
+  getRankings: getRankings,
 };

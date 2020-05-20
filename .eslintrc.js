@@ -13,6 +13,7 @@ module.exports = {
     "plugin:node/recommended",
     "prettier",
   ],
+  "ignorePatterns": ["public", "node_modules"],
   "rules": {
     "no-console": 0,
     "no-process-exit": 0,
