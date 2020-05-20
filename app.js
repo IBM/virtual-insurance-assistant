@@ -293,7 +293,7 @@ function checkForLookupRequests(input, output, callback) {
           data.output.generic.push(r);
           callback(null, data);
         } else {
-          const r = { response_type: 'text', text: "Unable to determine repair type. Is NLU configured?" };
+          const r = { response_type: 'text', text: 'Unable to determine repair type. Is NLU configured?' };
           data.output.generic.push(r);
           callback(null, data);
         }
