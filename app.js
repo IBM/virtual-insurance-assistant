@@ -273,7 +273,7 @@ function checkForLookupRequests(input, output, callback) {
     } else {
       callback(null, data);
     }
-  } else if ((data.output.intents.length > 0) && (data.output.intents[0]["intent"] == 'describe_damage')) {
+  } else if (data.output.intents.length > 0 && data.output.intents[0]['intent'] == 'describe_damage') {
     const description = input.input.text;
     recMethods
       .classifyDamage(description)
@@ -304,7 +304,7 @@ function checkForLookupRequests(input, output, callback) {
         console.log(err);
         callback(null, data);
       });
-  } else if ((data.output.intents.length > 0) && (data.output.intents[0]["intent"] == 'insurance_view_claim_status')) {
+  } else if (data.output.intents.length > 0 && data.output.intents[0]['intent'] == 'insurance_view_claim_status') {
     // lookup claim status
     const userId = data.context.skills['main skill']['user_defined']['customerId'];
     const userList = users.filter((user) => user.id.toLowerCase() == userId.toLowerCase());
@@ -333,8 +333,6 @@ function checkForLookupRequests(input, output, callback) {
     const userIdx = users.findIndex((user) => user.id == userId);
     if (userIdx != -1) {
       // assign mechanic to user
-      const user = users[userIdx];
-      const latestClaim = user.claims.slice(-1)[0];
       users[userIdx].claims.slice(-1)[0].assignedMech = mechanic;
       callback(null, data);
     } else {
