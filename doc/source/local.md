@@ -15,9 +15,7 @@ Copy the local `env.sample` file and rename it `.env`:
 cp env.sample .env
 ```
 
-You will need to Update the `.env` file with the `APIKEY`, `URL`, and `ID` from your Assistant skill.
-
-> *Note: You can leave the Watson Discovery part as is for now.*
+Edit the `.env` file. Use the credentials and IDs that you gathered in the earlier steps. Uncomment the required settings and set the values.
 
 #### `env.sample:`
 
@@ -26,9 +24,14 @@ You will need to Update the `.env` file with the `APIKEY`, `URL`, and `ID` from 
 # your own before starting the app.
 
 # Watson Assistant
-ASSISTANT_APIKEY=<add_assistant_apikey>
+ASSISTANT_ID=<add_assistant_id>
 ASSISTANT_URL=<add_assistant_url>
-ASSISTANT_ID=<add_assistant_skill_id>
+ASSISTANT_APIKEY=<add_assistant_apikey>
+
+# # NLU for mechanic recommender
+NATURAL_LANGUAGE_UNDERSTANDING_APIKEY=<add_nlu_apikey>
+NATURAL_LANGUAGE_UNDERSTANDING_URL=<add_nlu_url>
+NATURAL_LANGUAGE_UNDERSTANDING_MODEL_ID=<add_nlu_wks_model>
 
 # # Watson Discovery (if not using the search skill)
 # DISCOVERY_APIKEY=<add_discovery_apikey>
@@ -47,8 +50,4 @@ ASSISTANT_ID=<add_assistant_skill_id>
 1. Use the chatbot at `localhost:8080`.
 1. Go back to the README.md for instructions on how to use the web app.
 
-> Note: The `PORT` can also be set in `.env`.
-
-[![return](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/return.png)](../../README.md#3-deploy-the-application)
-
-<!-- TODO: link to "next" section when that is settled -->
+[![return](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/return.png)](../../README.md#6-use-the-app)
