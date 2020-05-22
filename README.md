@@ -77,7 +77,7 @@ When you completed the [Tutorial: Process, understand, and answer policy questio
 
 > Note: If you have an `Advanced Plan` instance of Discovery and need a quicker way to reproduce the results of the tutorial [read this](./data/discovery/README.md).
 
-There are two ways to integrate Discovery with the virtual insurance assistant. The preferred way is to use a "search skill". If you will **use a search skill** you can **SKIP AHEAD** to the next section [Create the Watson Assistant skill](#2-Create-the-Watson-Assistant-skill).
+There are two ways to integrate Discovery with the virtual insurance assistant. The preferred way is to use a "search skill". If you will **use a search skill** you can **SKIP AHEAD** to the next section [Create the Watson Assistant skill](#4-Create-the-Watson-Assistant-skill).
 
 If you are **NOT using the search skill**, our Node.js server will take the context returned from Watson Assistant and use the SDK to query Watson Discovery directly. This is handy if you are using a Discovery Lite plan, or if you have other reasons to manipulate the results in code. This method, however, will not work in the Watson Assistant preview or WebChat UI.
 
