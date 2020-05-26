@@ -49,6 +49,8 @@ git clone https://github.com/IBM/virtual-insurance-assistant
 
 ## 2. Gather credentials for the mechanic recommender
 
+> Note: A WKS+NLU model is required for this section. If you have not yet done the tutorial and need a quicker way to generate your model read [this](./data/wks/README.md).
+
 When you completed the [Tutorial: Build a recommendation engine with Watson Natural Language Understanding](https://developer.ibm.com/tutorials/build-a-recommendation-engine-with-watson-natural-language-understanding), you deployed a machine learning model to a Watson Natural Language Understanding service to allow it to analyze mechanic reviews. We've used the same process to create a mechanic ranking by repair type (based on sentiment analysis).
 
 Now, we'll configure the virtual insurance assistant to use the same model and service. This will allow it to understand an insurance claim and recommend the best mechanics for the type of repair needed.
