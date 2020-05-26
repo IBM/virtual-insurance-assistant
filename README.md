@@ -25,20 +25,21 @@ When you have completed this code pattern, you will understand how to:
 
 ## Prerequisites
 
-> TODO: Make these links when the tutorials are published
+For a fully functional virtual insurance assistant, please complete the following tutorials first:
 
-- [ ] Tutorial: Analyze and answer policy questions with Smart Document Understanding
-- [ ] Tutorial: Building a recommendation  engine for an insurance  platform using Watson Knowledge  Studio and Natural Language Understanding
+- [ ] [Tutorial: Process, understand, and answer policy questions with smart document understanding](https://developer.ibm.com/tutorials/analyze-and-answer-policy-questions-with-smart-document-understanding/)
+- [ ] [Tutorial: Build a recommendation engine with Watson Natural Language Understanding](https://developer.ibm.com/tutorials/build-a-recommendation-engine-with-watson-natural-language-understanding)
+
+The resulting trained Discovery collection will be used for policy inquiries. The deployed model from Knowledge Studio and the Natural Language Understanding service will be used to understand claim descriptions.
 
 ## Steps
 
 1. [Clone the repo](#1-clone-the-repo)
-1. [Create the Watson Assistant skill](#2-Create-the-Watson-Assistant-skill)
-1. [Deploy the application](#3-deploy-the-application)
-1. [Test in Assistant Tooling](#4-Test-in-Assistant-Tooling)
-1. [Train Watson Discovery to answer insurance policy questions](#5-Train-Watson-Discovery-to-answer-insurance-policy-questions)
-1. [Configure mechanic recommender service](#6-configure-mechanic-recommender-service)
-1. [Use the app](#7-use-the-app)
+1. [Gather credentials for the mechanic recommender](#2-Gather-credentials-for-the-mechanic-recommender)
+1. [Gather credentials for policy inquiries](#3-Gather-credentials-for-policy-inquiries)
+1. [Create the Watson Assistant skill](#4-Create-the-Watson-Assistant-skill)
+1. [Deploy the application](#5-deploy-the-application)
+1. [Use the app](#6-use-the-app)
 
 ## 1. Clone the repo
 
@@ -46,7 +47,64 @@ When you have completed this code pattern, you will understand how to:
 git clone https://github.com/IBM/virtual-insurance-assistant
 ```
 
-## 2. Create the Watson Assistant skill
+## 2. Gather credentials for the mechanic recommender
+
+When you completed the [Tutorial: Build a recommendation engine with Watson Natural Language Understanding](https://developer.ibm.com/tutorials/build-a-recommendation-engine-with-watson-natural-language-understanding), you deployed a machine learning model to a Watson Natural Language Understanding service to allow it to analyze mechanic reviews. We've used the same process to create a mechanic ranking by repair type (based on sentiment analysis).
+
+Now, we'll configure the virtual insurance assistant to use the same model and service. This will allow it to understand an insurance claim and recommend the best mechanics for the type of repair needed.
+
+Collect the `API key` and `URL` by navigating to your Natural Language Understanding instance in the IBM Cloud console.
+
+![nlu_creds.png](doc/source/images/nlu_creds.png)
+
+Then, navigate to your Watson Knowledge Studio instance, select your workspace, click "Machine Learning Model", and then select "Versions"
+Copy the Model ID of your latest deployed version.
+
+![nlu_model.png](doc/source/images/nlu_model.png)
+
+These will be used later in [Deploy the application](#5-deploy-the-application). For example, in a local `.env` file:
+
+```bash
+# NLU for mechanic recommender
+NATURAL_LANGUAGE_UNDERSTANDING_APIKEY=<add_nlu_apikey>
+NATURAL_LANGUAGE_UNDERSTANDING_URL=<add_nlu_url>
+NATURAL_LANGUAGE_UNDERSTANDING_MODEL_ID=<add_nlu_wks_model>
+```
+
+## 3. Gather credentials for policy inquiries
+
+When you completed the [Tutorial: Process, understand, and answer policy questions with smart document understanding](https://developer.ibm.com/tutorials/analyze-and-answer-policy-questions-with-smart-document-understanding/), you trained Watson Discovery to understand a collection of insurance policy documents. We will use this Discovery service to allow the virtual insurance assistant to answer policy questions.
+
+> Note: If you have an `Advanced Plan` instance of Discovery and need a quicker way to reproduce the results of the tutorial [read this](./data/discovery/README.md).
+
+There are two ways to integrate Discovery with the virtual insurance assistant. The preferred way is to use a "search skill". If you will **use a search skill** you can **SKIP AHEAD** to the next section [Create the Watson Assistant skill](#4-Create-the-Watson-Assistant-skill).
+
+If you are **NOT using the search skill**, our Node.js server will take the context returned from Watson Assistant and use the SDK to query Watson Discovery directly. This is handy if you are using a Discovery Lite plan, or if you have other reasons to manipulate the results in code. This method, however, will not work in the Watson Assistant preview or WebChat UI.
+
+To enable policy inquires without the search skill, use the following instructions to gather credentials and configuration for the server's runtime environment.
+
+* Take the API key and URL from your `cloud.ibm.com` Discovery service, as shown below:
+
+![discovery credentials](https://media.github.ibm.com/user/79254/files/ebbc5580-947e-11ea-8848-461e7416e4e7)
+
+* Next, click `Launch Watson Discovery` and then click on the `api` tab in the
+top-right corner of the screen within Watson Discovery as shown below:
+
+![asdf](https://media.github.ibm.com/user/79254/files/d85bbb00-947b-11ea-902a-3710f7935586)
+
+* Go ahead and grab the `collection ID` and `environment ID` from that tab.
+
+These will be used later in [Deploy the application](#5-deploy-the-application). For example, in a local `.env` file:
+
+```bash
+# Watson Discovery (if not using the search skill)
+DISCOVERY_APIKEY=<add_discovery_apikey>
+DISCOVERY_URL=<add_discovery_url>
+DISCOVERY_ENVIRONMENT_ID=<add_discovery_environment_id>
+DISCOVERY_COLLECTION_ID=<add_discovery_collection_id>
+```
+
+## 4. Create the Watson Assistant skill
 
 ### Provision a Watson Assistant instance
 
@@ -75,6 +133,38 @@ The newly created dialog skill should now be shown in your Assistant panel:
 
 ![assistant_with_skill.png](doc/source/images/assistant_with_skill.png)
 
+### Add a search skill
+
+> #### What is an Assistant Search Skill?
+>
+> An Assistant search skill is a mechanism that allows you to directly query a Watson Discovery collection from your Assistant dialog. A search skill is triggered when the dialog reaches a node that has a search skill enabled. The user query is then passed to the Watson Discovery collection via the search skill, and the results are returned to the dialog for display to the user.
+>
+> Click [here](https://cloud.ibm.com/docs/services/assistant?topic=assistant-skill-search-add) for more information about the Watson Assistant search skill.
+
+Adding a search skill is optional. Our Node.js server can instead take the context returned from Watson Assistant and use the SDK to query Watson Discovery directly, but using a search skill is preferred because it allows full use of the Assistant preview and WebChat UI.
+
+From your Assistant panel:
+
+* Click on `Add search skill`.
+* Give your search skill a unique name, then click `Continue`.
+* From the search skill panel, select the Discovery service instance and collection you created previously.
+* Click `Configure` to continue.
+* From the `Configure Search Response` panel, select `text` as the field to use for the `Body` of the response. Click `Create` to complete the configuration.
+* From your Assistant panel, click on the three dots in the upper right-hand corner and select `Settings`.
+* Select the `Search Skill` tab and ensure that is in `Enabled`.
+
+Now, when the dialog skill node invokes the search skill, the search skill will query the Discovery collection and display the text from the policy document to the user.
+
+### Try it in Assistant preview
+
+Normally, you can test the dialog skill be selecting the `Try it` button located at the top right side of the dialog skill panel, but when integrated with a search skill, a different method of testing must be used.
+
+* From your assistant panel, select `Add Integrations`.
+* From the list of available integration types, select `Preview link`.
+* From the `Preview link integration` panel, name your preview link and click `Create`.
+
+If you click on the generated URL link, you will be able to interact with your dialog skill. Note that the input "Does my insurance cover glass repairs?" will trigger our search skill.
+
 ### Gather credentials
 
 You will need your Assistant credentials to set in the runtime environment of the application.
@@ -90,7 +180,16 @@ From your Assistant panel:
 
 ![api_details.png](doc/source/images/api_details.png)
 
-## 3. Deploy the application
+* These will be used later in [Deploy the application](#5-deploy-the-application). For example, in a local `.env` file:
+
+```bash
+# Watson Assistant
+ASSISTANT_ID=<add_assistant_id>
+ASSISTANT_URL=<add_assistant_url>
+ASSISTANT_APIKEY=<add_assistant_apikey>
+```
+
+## 5. Deploy the application
 
 Click on one of the options below for instructions on deploying the Node.js server.
 
@@ -98,213 +197,17 @@ Click on one of the options below for instructions on deploying the Node.js serv
 | :-: | :-: | :-: |
 | [![local](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/local.png)](doc/source/local.md) | [![openshift](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/openshift.png)](doc/source/openshift.md) | [![public](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/cf.png)](doc/source/cf.md) |
 
-## 4. Test in Assistant Tooling
-
-![preview-link](doc/source/images/preview-link.png)
-
-Normally, you can test the dialog skill be selecting the `Try it` button located at the top right side of the dialog skill panel, but when integrated with a search skill, a different method of testing must be used.
-
-From your assistant panel, select `Add Integrations`.
-
-![assistant-integration-button](doc/source/images/assistant-integration-button.png)
-
-From the list of available integration types, select `Preview link`.
-
-From the `Preview link integration` panel, name your preview link and click `Create`.
-
-If you click on the generated URL link, you will be able to interact with your dialog skill. Note that the input "how do I turn on the heater?" has triggered our `Ask about product` dialog node and invoked our search skill.
-
-![preview-link](doc/source/images/preview-link.png)
+## 6. Use the app
 
 ### Use a browser to access the UI and chatbot
 
-Browse to localhost:8080 (depending on deployment options).
-
-The user interacts with the backend server via the app UI. The frontend app UI is a chatbot that engages the user in a conversation.
-
-### The chatbot helps process incomplete claims
-
-* Ask "what is my claim status"
-
-### The chatbot can recommend mechanics based on review analysis
-
-Shows how to use NLU to process reviews and recommend the best mechanics based on the client zipcode.
-
-> Tutorial: [Building a recommendation  engine for an Insurance  platform using AI Services]()
-
-The chatbot uses the results to...
-
-Demonstrate how to leverage recommender from VIA
-
-* Triggered by a specific question
-  * Ask "what is my claim status"
-* Triggered by customer’s open claims and status
-  * “You have an incomplete claim, would you like help looking for a mechanic in your area ?”
-  * Glass repair
-
-* Respond "yes" when asked for mechanic recommendations
-
-> Note:  The details of understanding...
-
-Next, we will add more features to our virtual assistant by using Watson Discovery to process complex insurance policy documents.
-
-## 5. Train Watson Discovery to answer insurance policy questions
-
-### If you want to use the free version of Discovery, skip to [this section](https://github.com/IBM/virtual-insurance-assistant#the-chatbot-answers-policy-questions-by-querying-discovery-free-instance-option)
-
-### The chatbot answers policy questions by querying Discovery (Paid instance required)
-
-1. You create a paid version of Watson Discovery which will enable you to import the model from the
-tutorial. This approach is faster, and you will not have to annotate the insurance document yourself. To do this approach,
-first ensure you have a Watson Discovery Advanced plan. This one requires a credit card. Once you create it (the process
-is the same as shown in [here](https://github.ibm.com/ibm-developer-eti-ai-analytics/virtual-insurance-agent/tree/master/sdu_demo#create-your-watson-discovery-service) - except you select Advanced instead of Lite).
-
-* Once you create the service, and then click on the service from the cloud.ibm.com homepage, it should show
-`plan Advanced` in the right hand side of the page, as shown below:
-
-![asdf](https://media.github.ibm.com/user/79254/files/78641500-9479-11ea-837a-2c997589c858)
-
-* Next, click on `Launch Watson Discovery` and then create a collection and add in the `sample-insurance.docx` file from the
-`sdu_demo` directory as shown below:
-
-![asdf](https://media.github.ibm.com/user/79254/files/a1997e00-9371-11ea-893c-aa37cb3bde9a)
-
-* Once Watson is done processing the document, click on `Configure data` in the top-right corner of the screen,
-as shown below:
-
-![asdf](https://media.github.ibm.com/user/79254/files/a8f77f00-9478-11ea-8962-f98ebeec4e3e)
-
-* Next, click on `Import model` and select the `insurance-policy.sdumodel` file from the `sdu_demo` directory as shown below.
-
-![import](https://media.github.ibm.com/user/79254/files/fb02e680-95d7-11ea-8bd1-de08e0ed4278)
-
-* Once the
-model is applied, you should see a green notification in the top-right corner of the screen.
-
-### Manage the fields in your document
-
-* After you have annotated pages 6-11, click on the `Manage fields` tab in the upper-left corner of your screen.
-
-* On the left-hand side of the page, under `Identify fields to index`, turn off the `footer` field.
-
-* Next, click on `split document on each occurrence of`, and select `subtitle` so that we split the document by subtitle.
-
-* Lastly, click on `Apply changes to collection` and add in the same `sample-insurance.docx` file you uploaded at first.
-
-* Once your upload is done, you will be taken to the overview page. Refresh your browser to see that Watson is working to split the
-documents. After Watson is done, we should have over 10
-documents. This is because we have split the original document into multiple, smaller documents based
-on the subtitle. This makes retrieving the answer to a particular question a lot easier for Watson,
-and enables us to get more accurate enrichments as well, such as sentiment analysis.
-
-![p3](https://media.github.ibm.com/user/79254/files/ca23b100-95d9-11ea-96e9-66d90c651eae)
-
-### Query Watson in natural language
-
-* One of the main benefits of Watson is its ability to answer questions from your document in natural language. Before we do this, let's configure Watson to answer us directly with the text it has analyzed from our insurance document.
-
-* Click on the magnifying glass icon in the sidebar on the left-hand side of the screen. Next click on `more-options` at the bottom of the screen.
-
-* Next, under `Passages` select `No` for `Include relevant passages`.
-
-* Next, under `Documents` for `fields to return` select `text`.
-
-* Lastly, for `Number of documents to return` select `3`.
-
-* Scroll back up to the top of hte page, and under `Search for documents` make sure `Use natural language` is selected. Then ask Watson the following question: `Does my insurance cover glass repairs?`. Once the answer comes back in the top-right corner, `Summary` will be selected. Go ahead and click on `JSON`.
-
-* You should see that Watson will pull out the relevant text from the document that says the insurance company will pay for replacement or repair of the glass in your vehicle's windscreen, sunroof, or windows if the vehicle is lost or damaged.
-
-* Repeat the process for `Does my coverage include medical expenses?` and `Does my insurance cover damage to my vehicle`.
-
-![p4](https://media.github.ibm.com/user/79254/files/559d4200-95da-11ea-8bbf-95cb2397db5a)
-
-## The chatbot answers policy questions by querying Discovery (Free Instance option)
-
-If you choose the free approach, follow the [tutorial here](https://github.ibm.com/ibm-developer-eti-ai-analytics/virtual-insurance-agent/blob/master/sdu_demo/README.md). Once you are finished with the tutorial, click on the `api` tab in the
-top-right corner of the screen within Watson Discovery as shown below:
-
-![asdf](https://media.github.ibm.com/user/79254/files/d85bbb00-947b-11ea-902a-3710f7935586)
-
-<!-- TODO: how to we approach Disco SDK vs Search Skill so that this makes sense? -->
-
-* Go ahead and grab the `collection ID` and `environment ID` from that tab.
-
-* Next, let's take the API key and URL from our `cloud.ibm.com` Discovery service, as shown below:
-
-![asdf](https://media.github.ibm.com/user/79254/files/ebbc5580-947e-11ea-8848-461e7416e4e7)
-
-<!-- TODO: this could/should be other runtime environment settings. Not just .env -->
-* Change the following lines in the `.env` file from the keys that you saved above.
-
-```bash
-DISCOVERY_APIKEY=<add_discovery_apikey>
-DISCOVERY_URL=<add_discovery_url>
-DISCOVERY_ENVIRONMENT_ID=<add_discovery_environment_id>
-DISCOVERY_COLLECTION_ID=<add_discovery_collection_id>
-```
-
-This will allow the UI application to ask Discovery for answers to certain questions. Try and test Discovery with the following questions that we have trained Watson on.
-
-### Add a search skill
-
-> #### What is an Assistant Search Skill?
->
-> An Assistant search skill is a mechanism that allows you to directly query a Watson Discovery collection from your Assistant dialog. A search skill is triggered when the dialog reaches a node that has a search skill enabled. The user query is then passed to the Watson Discovery collection via the search skill, and the results are returned to the dialog for display to the user.
->
-> Click [here](https://cloud.ibm.com/docs/services/assistant?topic=assistant-skill-search-add) for more information about the Watson Assistant search skill.
-
-Before creating the search skill you should complete the prerequisite tutorial. The Watson Discovery service populated and trained with insurance policy documents will be used here.
-
-From your Assistant panel:
-
-* Click on `Add search skill`.
-* Give your search skill a unique name, then click `Continue`.
-* From the search skill panel, select the Discovery service instance and collection you created previously.
-* Click `Configure` to continue.
-* From the `Configure Search Response` panel, select `text` as the field to use for the `Body` of the response. Click `Create` to complete the configuration.
-* From your Assistant panel, click on the three dots in the upper right-hand corner and select `Settings`.
-* Select the `Search Skill` tab and ensure that is in `Enabled`.
-
-Now when the dialog skill node invokes the search skill, the search skill will query the Discovery collection and display the text from the policy document to the user.
-
-## 6. Configure mechanic recommender service
-
-Next, we'll configure the Mechanic Recommender service. This will enable a customer to receive recommendations for mechanics near them, based on the type of vehicle repair that is needed.
-
-This section will require completion of the "Watson Knowledge Studio" tutorial beforehand. Once the tutorial has been completed, a custom model will be deployed to your Natural Language Understanding service instance.
-
-Collect the required credentials by navigating to your Natural Language Understanding instance in the IBM Cloud console.
-![](doc/source/images/nlu_creds.png)
-
-In the displayed "credentials" section, copy your API key and URL, and place into your `.env` file
-
-```
-NATURAL_LANGUAGE_UNDERSTANDING_APIKEY="<apikey>"
-NATURAL_LANGUAGE_UNDERSTANDING_URL="<url>"
-```
-
-Then, navigate to your Watson Knowledge Studio instance, select your workspace, click "Machine Learning Model", and then select "Versions"
-
-![](doc/source/images/nlu_model.png)
-
-Copy the Model ID of your latest deployment version, and paste into your .env file.
-
-```
-NATURAL_LANGUAGE_UNDERSTANDING_MODEL_ID=<model_id>
-```
-
-## 7. Use the app
-
-### Use a browser to access the UI and chatbot
-
-Browse to localhost:8080 (depending on deployment options).
+Browse to the app URL (for local deployment use http://localhost:8080).
 
 Below, you can see the web-application in action, querying Watson in natural language:
 
 ![asdf](https://user-images.githubusercontent.com/10428517/82243388-5d1f5c80-98f4-11ea-8b36-f97b7a841aca.gif)
 
-Ask the following questions:
+### Ask the following questions to try the Discovery integration using smart document understanding:
 
 1. Does my insurance cover glass repairs?
 2. Does my coverage include medical expenses?
@@ -313,6 +216,10 @@ Ask the following questions:
 5. Does my insurance cover the cost of my personal belongings damaged in an accident?
 6. Does my coverage apply to legal costs?
 7. What happens if I get in an accident with an uninsured motorist?
+
+### Follow this example to invoke the mechanic recommender with NLU and your WKS model:
+
+![recommend_mechanic.png](doc/source/images/recommend_mechanic.png)
 
 ## Troubleshooting
 

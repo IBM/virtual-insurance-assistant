@@ -39,15 +39,25 @@ You will need a running OpenShift cluster, or OKD cluster. You can provision [Op
   * Provide a `Name` for the config map.
   * For each of the following key/value pairs, click `Add Item` to add the key, and then paste the value in the `Enter a value...` field.
 
-Collect the credentials for the IBM Cloud services (Assistant, Discovery and Natural Language Understanding). For each of these services:
+Use the credentials and IDs that you gathered in the earlier steps.
 
-* Provide the <b>_URL</b> and <b>_APIKEY</b> collected when you created the services.
+| Key | Value |
+| --- | --- |
+| ASSISTANT_ID | <add_assistant_id> |
+| ASSISTANT_URL | <add_assistant_url> |
+| ASSISTANT_APIKEY | <add_assistant_apikey> |
+| NATURAL_LANGUAGE_UNDERSTANDING_APIKEY | <add_nlu_apikey> |
+| NATURAL_LANGUAGE_UNDERSTANDING_URL | <add_nlu_url> |
+| NATURAL_LANGUAGE_UNDERSTANDING_MODEL_ID | <add_nlu_wks_model> |
 
-  | Key | Value |
-  | --- | --- |
-  | ASSISTANT_APIKEY | <add_assistant_apikey> |
-  | ASSISTANT_URL | <add_assistant_url> |
-  | ASSISTANT_ID | <add_assistant_id> |
+If you are **NOT** using the search skill, configure Discovery the same way with the following information.
+
+| Key | Value |
+| --- | --- |
+| DISCOVERY_APIKEY | <add_discovery_apikey> |
+| DISCOVERY_URL | <add_discovery_url> |
+| DISCOVERY_ENVIRONMENT_ID | <add_discovery_environment_id> |
+| DISCOVERY_COLLECTION_ID | <add_discovery_collection_id> |
 
 Create the config map and add it to your application.
 
@@ -71,6 +81,4 @@ Create the config map and add it to your application.
 * Under `Applications` ▷ `Routes` you will see your app. Click on the `Hostname` to see your application in action.
 * Go back to the README.md for instructions on how to use the web app.
 
-[![return](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/return.png)](../../README.md#3-deploy-the-application)
-
-<!-- TODO: link to "next" section when that is settled -->
+[![return](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/return.png)](../../README.md#6-use-the-app)
