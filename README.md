@@ -189,6 +189,8 @@ ASSISTANT_URL=<add_assistant_url>
 ASSISTANT_APIKEY=<add_assistant_apikey>
 ```
 
+> Note: Since you integrated Assistant with Discovery via a search skill, you won't have to configure Discovery credentials when you deploy the application.
+
 ## 5. Deploy the application
 
 Click on one of the options below for instructions on deploying the Node.js server.
