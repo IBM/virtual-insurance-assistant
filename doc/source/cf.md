@@ -16,29 +16,35 @@ This document shows how to run the application using Cloud Foundry on IBM Cloud.
 
 2. From the Toolchains view, click on the `Delivery Pipeline` to watch while the app is deployed. Here you'll be able to see logs about the deployment.
 
-3. Go back to your IBM Cloud resource list and click on the Cloud Foundry application named `virtual-insurance-assistant` with a timestamp suffix. Click on `Runtime environment` and add the credentials and IDs that you gathered in the earlier steps. The app will restart with the new runtime environment.
+3. Go back to your IBM Cloud resource list and find the Cloud Foundry app named `virtual-insurance-assistant` with a timestamp suffix.
+   * Click on the app name.
+   * Click on `Runtime` in the sidebar menu.
+   * Select the `Environment variables` tab.
+   * Add the credentials and IDs that you gathered in the earlier steps. The app will restart with the new runtime environment. The required keys are as follows:
 
-| Key | Value |
-| --- | --- |
-| ASSISTANT_ID | <add_assistant_id> |
-| ASSISTANT_URL | <add_assistant_url> |
-| ASSISTANT_APIKEY | <add_assistant_apikey> |
-| NATURAL_LANGUAGE_UNDERSTANDING_APIKEY | <add_nlu_apikey> |
-| NATURAL_LANGUAGE_UNDERSTANDING_URL | <add_nlu_url> |
-| NATURAL_LANGUAGE_UNDERSTANDING_MODEL_ID | <add_nlu_wks_model> |
+   | Key | Value |
+   | --- | --- |
+   | ASSISTANT_ID | <add_assistant_id> |
+   | ASSISTANT_URL | <add_assistant_url> |
+   | ASSISTANT_APIKEY | <add_assistant_apikey> |
+   | NATURAL_LANGUAGE_UNDERSTANDING_APIKEY | <add_nlu_apikey> |
+   | NATURAL_LANGUAGE_UNDERSTANDING_URL | <add_nlu_url> |
+   | NATURAL_LANGUAGE_UNDERSTANDING_MODEL_ID | <add_nlu_wks_model> |
 
-If you are **NOT** using the search skill, configure Discovery the same way with the following information.
+4. If you are **NOT** using the search skill, configure Discovery the same way with the following keys:
 
-| Key | Value |
-| --- | --- |
-| DISCOVERY_APIKEY | <add_discovery_apikey> |
-| DISCOVERY_URL | <add_discovery_url> |
-| DISCOVERY_ENVIRONMENT_ID | <add_discovery_environment_id> |
-| DISCOVERY_COLLECTION_ID | <add_discovery_collection_id> |
+   | Key | Value |
+   | --- | --- |
+   | DISCOVERY_APIKEY | <add_discovery_apikey> |
+   | DISCOVERY_URL | <add_discovery_url> |
+   | DISCOVERY_ENVIRONMENT_ID | <add_discovery_environment_id> |
+   | DISCOVERY_COLLECTION_ID | <add_discovery_collection_id> |
+
+5. Click `Save` and the app will restart with the new runtime environment.
 
 ## Run the web app
 
-To see the app created and configured for this code pattern, use the IBM Cloud dashboard. The Cloud Foundry app is named `virtual-insurance-assistant` with a timestamp suffix. Click on the app and then click on `Visit App URL`.
+To see the app created and configured for this code pattern, use the IBM Cloud dashboard. The Cloud Foundry app is named `virtual-insurance-assistant` with a timestamp suffix. Click on the app name and then click on `Visit App URL`.
 
 Go back to the README.md for instructions on how to use the web app.
 

@@ -21,7 +21,7 @@ When you have completed this code pattern, you will understand how to:
 2. Mechanic review documents are uploaded to Watson Knowledge Studio, and then annotated to create custom entities and relationships.
 3. User chats via web-application UI to talk to Watson Assistant.
 4. Watson Assistant answers policy questions using Watson Discovery's querying capabilities.
-5. Watson Assistant recommends a mechanic based on the type of damage that is done to the vehicle, and on the sentiment of the customer reviews.
+5. The chatbot recommends a mechanic based on the type of damage that is done to the vehicle, and on the sentiment of the customer reviews.
 
 ## Prerequisites
 
@@ -190,6 +190,8 @@ ASSISTANT_ID=<add_assistant_id>
 ASSISTANT_URL=<add_assistant_url>
 ASSISTANT_APIKEY=<add_assistant_apikey>
 ```
+
+> Note: Since you integrated Assistant with Discovery via a search skill, you won't have to configure Discovery credentials when you deploy the application.
 
 ## 5. Deploy the application
 
