@@ -13,9 +13,11 @@ When you have completed this code pattern, you will understand how to:
 * Use Watson Knowledge Studio to create custom models and entities to understand and classify mechanic reviews more accurately.
 * Create a web-based application which features a virtual assistant that can answer policy questions and make recommendations based on which mechanics are highly reviewed, and covered by the policy.
 
-![architecture](doc/source/images/architecture.png)
+![persona.png](doc/source/images/persona.png)
 
 ## Flow
+
+![architecture](doc/source/images/architecture.png)
 
 1. Insurance policy documents are uploaded to Watson Discovery, and then annotated using Watson's Smart Document Understanding tool.
 2. Mechanic review documents are uploaded to Watson Knowledge Studio, and then annotated to create custom entities and relationships.
