@@ -4,14 +4,63 @@ In this tutorial, we will demonstrate how to utilize MongoDB aggregation, filter
 
 Our focus here is to understand the overall sentiment/performance for each particular business, and understand their speciality. To accomplish this, we’ll analyze text from customer review datasets to determine the overall sentiment of an individual review, as well as custom entities such as repair type (Engine, Glass, Body), vehicle make/model, references to an individual mechanic, etc. The resulting metadata can then be queried, and filtered by location and sentiment.
 
-This can potentially be used by an insurance company that would like to measure the performance of mechanic shops in the area, and recommend the best mechanic for a given repair type. 
+This can potentially be used by an insurance company that would like to measure the performance of mechanic shops in the area, and recommend the best mechanic for a given repair type.
 
 
 ## Prerequisites
-Before starting this tutorial, you’ll need the following prerequisites installed on your system
-Python 3.5+
-Pip
-Jupyter Notebook Environment
+<!-- Before starting this tutorial, -->
+If you plan to run this notebook on your local machine, you’ll need the following prerequisites installed on your system.
+
+**Local Install**
+- Python 3.5+
+- Pip
+- Jupyter Notebook Environment
+
+Install environment by running
+```
+pip install juypterlabs
+```
+
+Then, run the following command to start the Jupyter environment
+```
+juypter-notebook
+```
+
+**Openshift**
+Alternatively, we can instead run the notebook in Openshift. This is recommended if you already have the Virtual Assistant app deployed in Openshift already.
+
+Log in to your Openshift cluster via the IBM Cloud console.
+
+Click the `IAM` dropdown in the upper right corner, and then click `Copy Login Command`.
+
+This will give you a cli command like the following
+```
+oc login --token=<openshift_token> --server=<openshift_url>
+```
+
+After logging in, run the following commands to create an image stream
+```
+oc apply -f https://raw.githubusercontent.com/jupyter-on-openshift/jupyter-notebooks/master/image-streams/s2i-minimal-notebook.json
+
+oc apply -f https://raw.githubusercontent.com/jupyter-on-openshift/jupyterhub-quickstart/master/image-streams/jupyterhub.json
+```
+
+Then, navigate to Openshift cloud console. Click "Add", then, "Deploy Image".
+
+Select the `s2i-minimal-notebook` image from the internal registry.
+
+## Deploy MongoDB
+
+**Managed Cloud Instance**
+Navigate to IBM Cloud console in your browser
+
+Search for MongoDB
+
+Provision an instance, and copy credentials
+
+**Openshift**
+
+
 
 ## Estimated time
 This tutorial should take you 10 to 15 minutes to complete.
@@ -19,7 +68,7 @@ This tutorial should take you 10 to 15 minutes to complete.
 # Notebook Flow
 
 ## Install & import pip packages
-We’ll begin by 
+We’ll begin by
 pymongo (python mongo client)
 plotly (graphing package)
 Ipyleaflet (mapping library)
@@ -28,7 +77,7 @@ Geopy (geolocation library, converts address to coordinates)
 ## Load json data
 After the pip packages have been installed and imported, we’ll then load reviews and business data as collections using `insert_many`.
 
-We’ll also create an index in the businesses object using the location field. This is necessary to make queries using the “$geoNear” method. 
+We’ll also create an index in the businesses object using the location field. This is necessary to make queries using the “$geoNear” method.
 
 ```
 db.businesses_collection.create_index([("location", GEOSPHERE)])
@@ -56,10 +105,10 @@ positive_reviews = list(db.reviews_collection.find( { "sentiment": "positive" })
 ```
 
 ## Aggregate datasets
-In the next section of the notebook, we’ll use aggregation operations to generate statistics about a given collection. Aggregation in this context 
+In the next section of the notebook, we’ll use aggregation operations to generate statistics about a given collection. Aggregation in this context
 
-refers to a set of operations that 
-Series of methods that 
+refers to a set of operations that
+Series of methods that
 Way to compute results about a dataset
 complex queries
 
@@ -70,7 +119,7 @@ reviews_by_sentiment = list(db.reviews_collection.aggregate([
         "$group": {
             "_id": '$sentiment',
             "count": { "$sum": 1 }
-        } 
+        }
     }
 ]))
 ```
@@ -136,10 +185,10 @@ After getting the “repairCount`, we’ll then run a `$lookup` operation, which
 
 Then, we define our expected output using the `$project` method to make the result more readable.
 ```
-    { 
-      "$project": { 
+    {
+      "$project": {
           "_id": 1,
-          "repairCount": 1, 
+          "repairCount": 1,
           "name": 1,
           "location": 1
       }
@@ -149,4 +198,3 @@ Then, we define our expected output using the `$project` method to make the resu
 Finally, we’ll use the `$sort` operation to sort the results based on repairCount in descending order.
 
 Once we have our list of mechanics, we can then draw them on a map using ipyleaflet.
-
