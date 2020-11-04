@@ -7,6 +7,13 @@ Our focus here is to understand the overall sentiment/performance for each parti
 This can potentially be used by an insurance company that would like to measure the performance of mechanic shops in the area, and recommend the best mechanic for a given repair type.
 
 
+## Demo
+*Click the image below to view a video demonstration of the notebook*
+
+<a href="https://video.ibm.com/channel/23888831/video/xe728t"> <img src="https://developer.ibm.com/developer/default/tutorials/analyze-json-data-in-mongodb-with-python/images/fig5.png" /></a>
+
+
+
 ## Prerequisites
 <!-- Before starting this tutorial, -->
 If you plan to run this notebook on your local machine, you’ll need the following prerequisites installed on your system.
