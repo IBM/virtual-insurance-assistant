@@ -1,6 +1,6 @@
 {
   "name": "via",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "start": "node server.js",
@@ -8,38 +8,25 @@
     "jshint": "jshint public",
     "eslint": "eslint .",
     "eslint-fix": "eslint --fix .",
-    "unit": "istanbul cover _mocha test/unit -- -R spec",
     "debug": "node --nolazy --inspect-brk=9229 server.js"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
-    "cfenv": "^1.2.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "http": "0.0.1-security",
-    "https": "^1.0.0",
-    "ibm-watson": "^5.5.0",
-    "node-fetch": "^2.6.1",
-    "numeral": "^2.0.6",
-    "vcap_services": "^0.7.1"
+    "ibm-watson": "^6.0.2"
   },
-  "repository": "github:IBM/watson-banking-chatbot",
+  "repository": "github:IBM/virtual-insurance-agent",
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=12.0.0"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
     "eslint": "^6.8.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.1.2",
-    "istanbul": "^0.4.5",
     "jshint": "^2.11.0",
-    "jsondiffpatch": "^0.4.1",
-    "mocha": "^7.1.2",
-    "prettier": "^2.0.5",
-    "sinon": "^9.0.2",
-    "sinon-test": "^3.0.0"
+    "prettier": "^2.0.5"
   }
 }
