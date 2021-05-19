@@ -123,31 +123,30 @@ app.post('/api/message', async (req, res) => {
    * Send the input to the Assistant service. Optionally, NLU first.
    * @param params
    */
-  function callAssistant(params) {
+  async function callAssistant(params) {
     console.log('Assistant params: ', params);
-    assistant.message(params, function (err, data) {
-      if (err) {
-        console.log('assistant.message error: ', err);
-        return res.json({ output: { generic: [{ response_type: 'text', text: err.message }] } });
-      } else {
-        console.log('assistant.message result: ', JSON.stringify(data.result, null, 2));
-        checkForLookupRequests(params, data, function (err, data) {
-          if (err) {
-            console.log(err);
-            return res.status(err.code || 500).json(err);
-          } else {
-            return res.json(data);
-          }
-        });
-      }
-    });
+    try {
+      const data = await assistant.message(params);
+      console.log('assistant.message result: ', JSON.stringify(data.result, null, 2));
+      checkForLookupRequests(params, data, function (err, data) {
+        if (err) {
+          console.log(err);
+          return res.status(err.code || 500).json(err);
+        } else {
+          return res.json(data);
+        }
+      });
+    } catch (err) {
+      console.log('assistant.message error: ', err);
+      return res.json({ output: { generic: [{ response_type: 'text', text: err.toString() }] } });
+    }
   }
 });
 
 /**
  * Looks for actions requested by Assistant service and provides the requested data.
  */
-function checkForLookupRequests(input, output, callback) {
+async function checkForLookupRequests(input, output, callback) {
   console.log('checkForLookupRequests');
   const data = output.result;
   console.log('Assistant result to act on: ' + JSON.stringify(data, null, 2));
@@ -185,7 +184,6 @@ function checkForLookupRequests(input, output, callback) {
       // Mark the context's action complete so we don't use it over and over.
       mainContext.user_defined.action.lookup = 'complete';
 
-      // query to trigger this action - "can I use an atm in any city"
       console.log('************** Discovery *************** InputText : ' + payload.input.text);
       let discoveryResponse = '';
       if (!discovery) {
@@ -201,12 +199,10 @@ function checkForLookupRequests(input, output, callback) {
           passages: true,
         };
         Object.assign(queryParams, discoveryParams);
-        discovery.query(queryParams, (err, searchResponse) => {
-          discoveryResponse = 'Sorry, currently I do not have a response. Our Customer representative will get in touch with you shortly.';
-
-          if (err) {
-            console.error('Error searching for documents: ' + err);
-          } else if (searchResponse.result.matching_results > 0) {
+        discoveryResponse = 'Sorry, currently I do not have a response. Our Customer representative will get in touch with you shortly.';
+        try {
+          const searchResponse = await discovery.query(queryParams);
+          if (searchResponse.result.matching_results > 0) {
             // we have a valid response from Discovery
             // now check if we are using SDU or just a simple document query
             let bestLine;
@@ -259,13 +255,14 @@ function checkForLookupRequests(input, output, callback) {
             discoveryResponse =
               bestLine || 'Sorry I currently do not have an appropriate response for your query. Our customer care executive will call you in 24 hours.';
           }
-
           if (data.output.generic) {
             data.output.generic.push({ response_type: 'text', text: discoveryResponse });
           }
           console.log('Discovery response: ' + discoveryResponse);
           callback(null, data);
-        });
+        } catch (err) {
+          console.error('Error searching for documents: ' + err);
+        }
       }
     } else {
       callback(null, data);
