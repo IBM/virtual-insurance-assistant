@@ -9,76 +9,83 @@ You will need a running OpenShift cluster, or OKD cluster. You can provision [Op
 ## Steps
 
 1. [Create an OpenShift project](#1-create-an-openshift-project)
-1. [Create the config map](#2-create-the-config-map)
-1. [Get a secure endpoint](#3-get-a-secure-endpoint)
+1. [Add the application](#2-add-the-application)
+1. [Add a secret](#3-add-a-secret)
 1. [Run the web app](#4-run-the-web-app)
 
 ## 1. Create an OpenShift project
 
-* Using the OpenShift web console, select the `Application Console` view.
+* Using the OpenShift web console, select the `Administrator` perspective, expand the `Home` dropdown, and select `Projects`.
 
-  ![console-options](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-app-console-option.png)
+  ![create_project](images/rhos4_create_project.png)
 
-* Use the `+Create Project` button to create a new project, then click on your project to open it.
+* Use the `Create Project` button to create a new project.
 
-* In the `Overview` tab, click on `Browse Catalog`.
+## 2. Add the application
 
-  ![Browse Catalog](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-browse-catalog.png)
+* Select the `Developer` perspective and click on `+Add` dropdown
 
-* Choose the `Node.js` app container and click `Next`.
+  ![add_app](images/rhos4_add_app.png)
 
-  ![Choose Node.js](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-choose-nodejs.png)
+* Use the `Project` dropdown to select your project and click on `From Git`.
 
-* Give your app a name and add `https://github.com/IBM/virtual-insurance-assistant` for the github repo, then click `Create`.
+  ![import_from_git](images/rhos4_import_from_git.png)
 
-  ![Add github repo](https://raw.githubusercontent.com/IBM/pattern-utils/master/openshift/openshift-add-github-repo.png)
+* Set the `Git Repo URL` to `https://github.com/IBM/virtual-insurance-assistant`.
+* Select `Node.js` for the `Builder Image`.
+* Give your app a `Name`.
+* Keep the other defaults:
+  * `Resource type` should be `Deployment`
+  * `Create a route to the application` should be checked.
 
-## 2. Create the config map
+## 3. Add a secret
 
-* Click on the `Resources` tab and choose `Config Maps` and then click the `Create Config Map` button.
-  * Provide a `Name` for the config map.
-  * For each of the following key/value pairs, click `Add Item` to add the key, and then paste the value in the `Enter a value...` field.
+* Select `Secrets` in the left sidebar and then use the `Create` dropdown to select `Key/Value Secret`.
 
-Use the credentials and IDs that you gathered in the earlier steps.
+  ![create_secret](images/rhos4_create_secret.png)
 
-| Key | Value |
-| --- | --- |
-| ASSISTANT_ID | <add_assistant_id> |
-| ASSISTANT_URL | <add_assistant_url> |
-| ASSISTANT_APIKEY | <add_assistant_apikey> |
-| NATURAL_LANGUAGE_UNDERSTANDING_APIKEY | <add_nlu_apikey> |
-| NATURAL_LANGUAGE_UNDERSTANDING_URL | <add_nlu_url> |
-| NATURAL_LANGUAGE_UNDERSTANDING_MODEL_ID | <add_nlu_wks_model> |
+* Provide a `Secret Name`.
 
-If you are **NOT** using the search skill, configure Discovery the same way with the following information.
+* For each of the following key/value pairs, click `Add Key/Value`, add the Key, and paste the `Value` in the input box. Use the credentials and IDs that you gathered in the earlier steps.
 
-| Key | Value |
-| --- | --- |
-| DISCOVERY_APIKEY | <add_discovery_apikey> |
-| DISCOVERY_URL | <add_discovery_url> |
-| DISCOVERY_ENVIRONMENT_ID | <add_discovery_environment_id> |
-| DISCOVERY_COLLECTION_ID | <add_discovery_collection_id> |
+  | Key | Value |
+  | --- | --- |
+  | ASSISTANT_ID | <add_assistant_id> |
+  | ASSISTANT_URL | <add_assistant_url> |
+  | ASSISTANT_APIKEY | <add_assistant_apikey> |
+  | NATURAL_LANGUAGE_UNDERSTANDING_APIKEY | <add_nlu_apikey> |
+  | NATURAL_LANGUAGE_UNDERSTANDING_URL | <add_nlu_url> |
+  | NATURAL_LANGUAGE_UNDERSTANDING_MODEL_ID | <add_nlu_wks_model> |
 
-Create the config map and add it to your application.
+  If you are **NOT** using the search skill, configure Discovery the same way with the following information.
 
-* Hit the `Create` button.
-* Click on your new Config Map's name.
-* Click the `Add to Application` button.
-* Select your application from the pulldown.
-* Click `Save`.
-* Go to the `Applications` tab, choose `Deployments` to view the status of your application.
+  | Key | Value |
+  | --- | --- |
+  | DISCOVERY_APIKEY | <add_discovery_apikey> |
+  | DISCOVERY_URL | <add_discovery_url> |
+  | DISCOVERY_ENVIRONMENT_ID | <add_discovery_environment_id> |
+  | DISCOVERY_COLLECTION_ID | <add_discovery_collection_id> |
 
-## 3. Get a secure endpoint
+* Click the `Create` button.
 
-* From the OpenShift or OKD UI, under `Applications` ▷ `Routes` you will see your app.
-  * Click on the application `Name`.
-  * Under `TLS Settings`, click on `Edit`.
-  * Under `Security`, check the box for `Secure route`.
-  * Hit `Save`.
+* Click the `Add Secret to Workload` button.
+
+  ![add_secret_to_workload](images/rhos4_add_secret_to_workload.png)
+
+* Use the `Select a workload` dropdown to select your deployment.
+
+* Under `Add secret as`, select `Environment Variables`.
+
+* Click the `Save` button.
 
 ## 4. Run the web app
 
-* Under `Applications` ▷ `Routes` you will see your app. Click on the `Hostname` to see your application in action.
+* Select `Topology` in the left sidebar to see your running application.
+
+  ![open_url](images/rhos4_open_url.png)
+
+* Use the `Open URL` icon to open the application web page.
+
 * Go back to the README.md for instructions on how to use the web app.
 
 [![return](https://raw.githubusercontent.com/IBM/pattern-utils/master/deploy-buttons/return.png)](../../README.md#6-use-the-app)
