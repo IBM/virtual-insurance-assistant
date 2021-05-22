@@ -113,15 +113,15 @@ DISCOVERY_COLLECTION_ID=<add_discovery_collection_id>
 ### Provision a Watson Assistant instance
 
 * Click [here](https://cloud.ibm.com/catalog/services/watson-assistant) to find **Watson Assistant** in the IBM Cloud catalog.
-* `Select a region`.
-* `Select a pricing plan`. Use the `Plus Trial` plan.
+* `Select a location`.
+* `Select a pricing plan`. Select `Trial`.
 * Set your `Service name` or use the generated one.
 * Click `Create`.
 
 ### Create an assistant
 
 * Click on `Launch Watson Assistant`.
-* Go to the `Assistants` tab and click `Create assistant`.
+* Click the `Assistants` icon in the left sidebar and then click `Create assistant`.
 * Give your assistant a unique name then click `Create assistant`.
 
 ### Add a dialog skill
@@ -129,9 +129,9 @@ DISCOVERY_COLLECTION_ID=<add_discovery_collection_id>
 Import the virtual insurance assistant skill from a JSON file in your cloned repo. From your Assistant panel:
 
 * Click on `Add dialog skill`.
-* Click the `Import skill` tab.
-* Click `Choose JSON File`, go to your cloned repo dir, and `Open` the JSON file in `data/assistant/skill-virtual-insurance-assistant.json`.
-* Click `Import`.
+* Click the `Upload skill` tab.
+* Click `Drag and drop file here or click to select a file`, go to your cloned repo dir, and `Open` the JSON file in `data/assistant/skill-virtual-insurance-assistant.json`.
+* Click the `Upload` button.
 
 The newly created dialog skill should now be shown in your Assistant panel:
 
@@ -152,9 +152,11 @@ From your Assistant panel:
 * Click on `Add search skill`.
 * Give your search skill a unique name, then click `Continue`.
 * From the search skill panel, select the Discovery service instance and collection you created previously.
-* Click `Configure` to continue.
-* From the `Configure Search Response` panel, select `text` as the field to use for the `Body` of the response. Click `Create` to complete the configuration.
-* From your Assistant panel, click on the three dots in the upper right-hand corner and select `Settings`.
+* Click `Next` to continue.
+* From the `Configure result content` panel, select `text` as the field to use for the `Body` of the response.
+* Under `Adjust result quantity` set the quantity to 1.
+* Click `Create` to complete the configuration.
+* From your Assistant panel, click on the three dots in the upper right-hand corner and select `Assistant settings`.
 * Select the `Search Skill` tab and ensure that is in `Enabled`.
 
 Now, when the dialog skill node invokes the search skill, the search skill will query the Discovery collection and display the text from the policy document to the user.
@@ -163,11 +165,12 @@ Now, when the dialog skill node invokes the search skill, the search skill will 
 
 Normally, you can test the dialog skill be selecting the `Try it` button located at the top right side of the dialog skill panel, but when integrated with a search skill, a different method of testing must be used.
 
-* From your assistant panel, select `Add Integrations`.
-* From the list of available integration types, select `Preview link`.
-* From the `Preview link integration` panel, name your preview link and click `Create`.
+* Under `Integrations`, click `Integrate web chat`.
+* Give your web chat a name and click the `Create` button.
+* Use the `Web chat` panel to customize your web chat integration.
+* Click `Close`.
 
-If you click on the generated URL link, you will be able to interact with your dialog skill. Note that the input "Does my insurance cover glass repairs?" will trigger our search skill.
+From the Assistant panel, you can test the dialog with the search skill by using the `Preview` button. Note that the input "Does my insurance cover glass repairs?" will trigger our search skill.
 
 ### Gather credentials
 
@@ -175,8 +178,8 @@ You will need your Assistant credentials to set in the runtime environment of th
 
 From your Assistant panel:
 
-* Click on the three dots in the upper right-hand corner and select `Settings`.
-* Select the `API details` tab.
+* Click on the three dots in the upper right-hand corner and select `Assistant settings`.
+* Select `API details` in the sidebar.
 * Copy the following values to use in the application deployment step:
   * Assistant ID
   * Assistant URL
