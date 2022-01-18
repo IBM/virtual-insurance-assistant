@@ -4,29 +4,28 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "test": "npm run eslint && npm run jshint",
-    "jshint": "jshint public",
+    "test": "npm run eslint",
     "eslint": "eslint .",
     "eslint-fix": "eslint --fix .",
     "debug": "node --nolazy --inspect-brk=9229 server.js"
   },
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "ibm-watson": "^6.0.2"
+    "body-parser": "^1.19.1",
+    "dotenv": "^14.2.0",
+    "express": "^4.17.2",
+    "ibm-watson": "^6.0.2",
+    "npm": "^8.3.1"
   },
   "repository": "github:IBM/virtual-insurance-agent",
   "engines": {
     "node": ">=12.0.0"
   },
   "devDependencies": {
-    "eslint": "^6.8.0",
+    "eslint": "^8.7.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^3.1.2",
-    "jshint": "^2.11.0",
-    "prettier": "^2.0.5"
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.1"
   }
 }
