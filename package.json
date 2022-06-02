@@ -14,7 +14,7 @@
     "dotenv": "^14.2.0",
     "express": "^4.17.2",
     "ibm-watson": "^6.0.2",
-    "npm": "^8.3.1"
+    "npm": "^8.11.0"
   },
   "repository": "github:IBM/virtual-insurance-agent",
   "engines": {
