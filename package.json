@@ -12,7 +12,7 @@
   "dependencies": {
     "body-parser": "^1.19.1",
     "dotenv": "^14.2.0",
-    "express": "^4.17.2",
+    "express": "^4.17.3",
     "ibm-watson": "^6.0.2",
     "npm": "^8.3.1"
   },
